@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ImportDeclaration 1`] = `
+Array [
+  "import abc, { something } from 'xxx';",
+]
+`;
+
+exports[`ImportDeclarationWildcard 1`] = `
+Array [
+  "import abc, { something } from 'xxx';",
+  "import bcd from 'xxx';",
+]
+`;

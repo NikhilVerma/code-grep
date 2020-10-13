@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`jsx expressions 1`] = `
+Array [
+  "<Component prop=\\"test\\" />",
+  "<Component onClick={evt => alert(evt)} prop=\\"test\\" />",
+  "<Component prop=\\"test\\">
+            Some value
+        </Component>",
+]
+`;
+
+exports[`neighboring elements 1`] = `
+Array [
+  "<>
+        <C>
+            <A />
+            <B />
+        </C>
+        <B>
+            <A>Hello</A>
+            <B>World</B>
+        </B>
+        <A />
+        <D />
+        <A />
+        <B />
+    </>",
+  "<C>
+            <A />
+            <B />
+        </C>",
+  "<B>
+            <A>Hello</A>
+            <B>World</B>
+        </B>",
+]
+`;

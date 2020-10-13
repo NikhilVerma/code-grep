@@ -71,3 +71,23 @@ glob.sync(globPattern, {
         '**/js/cosmos/**',
     ],
 }).forEach(astFinder);
+
+function astFinder(fileName: string) {
+    const code = fs.readFileSync(fileName, 'utf8');
+
+    try {
+        const ast = parseCode(code, fileName);
+
+        const visitor = getVisitorFromMask(expressionMask[0], (nodePath) => {
+            console.log(fileName, nodePath.toString());
+        });
+
+        traverse(ast, visitor);
+    } catch (e) {
+        console.log(chalk.bgRed(`Failed to parse ${fileName}. Call with --debug to see stack`));
+
+        if (argv.debug) {
+            console.error(e);
+        }
+    }
+}

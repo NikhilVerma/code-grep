@@ -1,7 +1,8 @@
 {
-  "name": "ast-grep",
-  "main": "dist/ast-grep.js",
-  "types": "dist/ast-grep.d.ts",
+  "name": "code-grep",
+  "version": "0.0.1-alpha",
+  "main": "dist/code-grep.js",
+  "types": "dist/code-grep.d.ts",
   "dependencies": {
     "@babel/parser": "7.9.4",
     "@babel/traverse": "7.9.0",
@@ -10,9 +11,11 @@
     "yargs": "^15.3.1"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.11.5",
     "@babel/preset-typescript": "^7.10.4",
     "@types/babel__traverse": "7.0.9",
     "@types/glob": "^7.1.1",
+    "@types/jest": "^26.0.14",
     "@types/yargs": "^15.0.4",
     "jest": "^26.5.3",
     "ts-node": "8.8.1",
@@ -24,6 +27,7 @@
     "tsc:debug": "NODE_OPTIONS=\"--max_old_space_size=8075 --inspect --inspect-brk\" ts-node -T --project ../../tsconfig.webpack.json",
     "grep": "yarn tsc:node ./ast-grep.ts",
     "test": "jest",
+    "test:debug": "node --inspect --inspect-brk ./node_modules/.bin/jest --no-cache --no-watchman --runInBand",
     "prepublish": "tsc"
   }
 }
