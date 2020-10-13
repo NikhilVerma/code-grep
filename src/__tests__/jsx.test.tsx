@@ -1,4 +1,4 @@
-import { codeSearch } from 'ast-grep';
+import { codeSearch } from 'code-grep';
 import { createCodeMask } from 'parsers/babel';
 
 test('jsx expressions', () => {

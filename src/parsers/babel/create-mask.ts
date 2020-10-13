@@ -1,5 +1,6 @@
 import { babelParser } from './babel-parser';
 import { Statement, Expression } from '@babel/types';
+import { Node } from '@babel/traverse';
 
 const SKIP_MASK_KEYS = ['start', 'end', 'loc', 'selfClosing', 'extra'] as const;
 
@@ -53,16 +54,17 @@ function getParsedCode(code: string) {
     }
 }
 
-function createMask<T extends Record<string, any> | Record<string, any>[]>(node: T): T {
+function createMask(node: Node[] | Node) {
     if (node instanceof Array) {
-        return node.map(createMask);
+        const masks: Partial<Node>[] = node.map(createMask);
+        return masks;
     } else if (node instanceof Object) {
         return (Object.keys(node) as Array<keyof T>).reduce((out, key) => {
             if (SKIP_MASK_KEYS.indexOf(key) === -1 && !isEmpty(node[key])) {
                 out[key] = createMask(node[key]);
             }
             return out;
-        }, {} as T);
+        }, {} as Partial<Node>);
     } else {
         return node;
     }

@@ -10,11 +10,13 @@
 
 import parseCode, { CodeMask } from 'parsers/babel';
 import traverse, { Node, NodePath, TraverseOptions } from '@babel/traverse';
+import { argv } from 'yargs';
 
 export function codeSearch(
     code: string,
     masks: CodeMask[],
     onMatch: (nodePath: NodePath<Node>) => void,
+    onError?: (err: any) => void,
     fileName?: string
 ) {
     try {
@@ -24,7 +26,11 @@ export function codeSearch(
             traverse(ast, getVisitorFromMask(expressionMask, onMatch));
         });
     } catch (err) {
-        console.error(`Failed to parse ${fileName}.`, err);
+        if (onError) {
+            onError(err);
+        } else {
+            console.error(err);
+        }
     }
 }
 
