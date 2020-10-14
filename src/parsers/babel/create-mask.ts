@@ -1,5 +1,5 @@
 import { babelParser } from './babel-parser';
-import { Statement, Expression } from '@babel/types';
+import { Statement, Expression, RestElement, ObjectProperty } from '@babel/types';
 import { Node } from '@babel/traverse';
 
 const SKIP_MASK_KEYS = ['start', 'end', 'loc', 'selfClosing', 'extra'];
@@ -19,6 +19,19 @@ function expandMask(mask: Partial<NodeType>): Array<Partial<NodeType>> {
         return [mask, ...expandMask(mask.expression)];
     }
 
+    // If a user enters { a, b } we should also match `const { a , b } = c;`
+    if (mask.type === 'ObjectExpression' && mask.properties) {
+        return [
+            mask,
+            {
+                type: 'ObjectPattern',
+                // We kind of don't need to worry about passing invalid mask values, because they are not used
+                // to reconstruct the JS syntax
+                properties: mask.properties as Array<ObjectProperty | RestElement>,
+            },
+        ];
+    }
+
     // If a user enters "<A /><B />" as their pattern, it's not valid JSX
     // so we wrap it with fragments, but the user could be looking to match neighbouring elements
     if (mask.type === 'JSXFragment') {
@@ -26,6 +39,12 @@ function expandMask(mask: Partial<NodeType>): Array<Partial<NodeType>> {
             { type: 'JSXFragment', children: mask.children },
             { type: 'JSXElement', children: mask.children },
         ];
+    }
+
+    // If a user enters "<A /><B />" as their pattern, it's not valid JSX
+    // so we wrap it with fragments, but the user could be looking to match neighbouring elements
+    if (mask.type === 'FunctionExpression') {
+        return [mask, { ...mask, type: 'FunctionDeclaration' }];
     }
 
     //@todo - Add support for AssignmentExpression (a = 5) > VariableDeclarator (const a = 5)

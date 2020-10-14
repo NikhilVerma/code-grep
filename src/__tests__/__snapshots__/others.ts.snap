@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FunctionDeclaration (wildcard) 1`] = `
+Array [
+  "function test() {
+  if (started) {
+    return;
+  }
+
+  doSomethingElse();
+}",
+]
+`;
+
+exports[`ObjectExpression 1`] = `
+Array [
+  "{
+  containerEl,
+  icon,
+  delay
+}",
+]
+`;

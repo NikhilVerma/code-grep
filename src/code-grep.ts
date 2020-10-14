@@ -6,6 +6,8 @@
  * - Member expressions create({ something }) vs xxx.create({ something })
  * - Detect file contents (to use TS or Flow etc)
  * - Support block statements - { onOpen_: null }
+ * - 'return' outside of function (2:12)
+ * - function ___() {if (started) { return; }}
  */
 
 import parseCode, { CodeMask } from './parsers/babel';
