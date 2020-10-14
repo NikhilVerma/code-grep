@@ -48,12 +48,9 @@ files.forEach(function (fileName: string) {
 
     filesScanned++;
 
-    codeSearch(
+    const matches = codeSearch(
         code,
         expressionMask,
-        function (nodePath) {
-            console.log(`${fileName}: ${chalk.blue(nodePath.toString())}`);
-        },
         function (err) {
             if (argv.verbose) {
                 console.error(`🔴 Failed to parse ${fileName}`);
@@ -64,9 +61,11 @@ files.forEach(function (fileName: string) {
         },
         fileName
     );
+
+    matches.forEach((nodePath) => console.log(`${fileName}: ${chalk.blue(nodePath.toString())}`));
 });
 
-console.log(`\n✅ Scanned ${filesScanned} files in ${(Date.now() - now) / 1000}ms.`);
+console.log(`\n✅ Scanned ${filesScanned} files in ${(Date.now() - now) / 1000}s.`);
 
 if (filesFailed.length > 0) {
     console.warn(

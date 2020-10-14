@@ -5,8 +5,8 @@ Array [
   "<Component prop=\\"test\\" />",
   "<Component onClick={evt => alert(evt)} prop=\\"test\\" />",
   "<Component prop=\\"test\\">
-            Some value
-        </Component>",
+                Some value
+            </Component>",
 ]
 `;
 
@@ -36,3 +36,15 @@ Array [
         </B>",
 ]
 `;
+
+exports[`same jsx elements 1`] = `
+Array [
+  "<>
+        <A />
+        <B />
+        <A />
+    </>",
+]
+`;
+
+exports[`same jsx elements 2`] = `Array []`;

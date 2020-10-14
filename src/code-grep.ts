@@ -14,22 +14,31 @@ import traverse, { Node, NodePath, TraverseOptions } from '@babel/traverse';
 export function codeSearch(
     code: string,
     masks: CodeMask[],
-    onMatch: (nodePath: NodePath<Node>) => void,
     onError?: (err: any) => void,
     fileName?: string
 ) {
     try {
         const ast = parseCode(code, fileName);
+        const matches: NodePath<Node>[] = [];
 
         masks.forEach((expressionMask) => {
-            traverse(ast, getVisitorFromMask(expressionMask, onMatch));
+            traverse(
+                ast,
+                getVisitorFromMask(expressionMask, (nodePath) => {
+                    matches.push(nodePath);
+                })
+            );
         });
+
+        return matches;
     } catch (err) {
         if (onError) {
             onError(err);
         } else {
             console.error(err);
         }
+
+        return [];
     }
 }
 
@@ -54,7 +63,7 @@ function isObject(value: any): value is object {
     return Object.prototype.toString.call(value) === '[object Object]';
 }
 
-function isArray(value: any): value is [] {
+function isArray(value: any): value is any[] {
     return Object.prototype.toString.call(value) === '[object Array]';
 }
 
@@ -68,7 +77,19 @@ function matches(value: Node, mask: any): boolean {
             !Object.entries(mask).some(([key, maskValue]) => !matches(value[key], maskValue))
         );
     } else if (isArray(mask) && isArray(value)) {
-        return mask.every((maskItem) => value.some((valueItem) => matches(valueItem, maskItem)));
+        const clone = [...value];
+
+        return mask.every((maskItem) => {
+            return clone.some((valueItem, index) => {
+                if (matches(valueItem, maskItem)) {
+                    // This prevents re-matching with same items (e.g if user searched for <A/><A/>)
+                    clone[index] = null;
+                    return true;
+                }
+
+                return false;
+            });
+        });
     }
 
     return value === mask;
