@@ -2,3 +2,6 @@
 tsconfig.json
 .gitignore
 src/
+.vscode
+jest.config.js
+babel.config.js

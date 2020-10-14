@@ -1,15 +1,5 @@
-/* eslint-disable no-console */
-/* eslint-env node */
+#!/usr/bin/env node
 
-/**
- * This file is a tool to "grep" for code by using Abstract syntax trees
- * It allows developers to do refactorings by searching for code patterns
- * which would be hard to express using regular expressions
- *
- * - Member expressions create({ something }) vs xxx.create({ something })
- * - Detect file contents (to use TS or Flow etc)
- * - Support block statements - { onOpen_: null }
- */
 import fs from 'fs';
 import glob from 'glob';
 import path from 'path';
