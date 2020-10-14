@@ -2,7 +2,7 @@ import { babelParser } from './babel-parser';
 import { Statement, Expression } from '@babel/types';
 import { Node } from '@babel/traverse';
 
-const SKIP_MASK_KEYS = ['start', 'end', 'loc', 'selfClosing', 'extra'] as const;
+const SKIP_MASK_KEYS = ['start', 'end', 'loc', 'selfClosing', 'extra'];
 
 export type CodeMask = ReturnType<typeof createCodeMask>[number];
 
@@ -10,10 +10,12 @@ export function createCodeMask(code: string) {
     return createMask(getParsedCode(code).program.body).map(expandMask).flat();
 }
 
-function expandMask(mask: Statement | Expression): Array<Partial<Statement | Expression>> {
+type NodeType = Node | Statement | Expression;
+
+function expandMask(mask: Partial<NodeType>): Array<Partial<NodeType>> {
     // A lot of code is parsed as an expression statement while the intention of the user
     // is to search for the expression inside the statement
-    if (mask.type === 'ExpressionStatement') {
+    if (mask.type === 'ExpressionStatement' && mask.expression) {
         return [mask, ...expandMask(mask.expression)];
     }
 
@@ -54,17 +56,23 @@ function getParsedCode(code: string) {
     }
 }
 
-function createMask(node: Node[] | Node) {
+function createMask(node: NodeType[]): Partial<NodeType>[];
+function createMask(node: NodeType): Partial<NodeType>;
+
+function createMask(node: any): any {
     if (node instanceof Array) {
-        const masks: Partial<Node>[] = node.map(createMask);
-        return masks;
+        return node.map(createMask);
     } else if (node instanceof Object) {
-        return (Object.keys(node) as Array<keyof T>).reduce((out, key) => {
+        const nodeKeys: Array<keyof typeof node> = Object.keys(node);
+        const output: Partial<typeof node> = {};
+
+        return nodeKeys.reduce((out, key) => {
+            key = String(key);
             if (SKIP_MASK_KEYS.indexOf(key) === -1 && !isEmpty(node[key])) {
-                out[key] = createMask(node[key]);
+                out[String(key)] = createMask(node[key]);
             }
             return out;
-        }, {} as Partial<Node>);
+        }, output);
     } else {
         return node;
     }

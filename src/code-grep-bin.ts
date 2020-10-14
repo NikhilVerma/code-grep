@@ -14,8 +14,8 @@ import fs from 'fs';
 import glob from 'glob';
 import path from 'path';
 import { argv } from 'yargs';
-import { createCodeMask } from 'parsers/babel';
-import { codeSearch } from 'code-grep';
+import { createCodeMask } from './parsers/babel';
+import { codeSearch } from './code-grep';
 import chalk from 'chalk';
 
 // Don't scan files over 1MB

@@ -1,8 +1,7 @@
 {
   "name": "code-grep",
   "version": "0.0.1-alpha",
-  "main": "dist/code-grep.js",
-  "types": "dist/code-grep.d.ts",
+  "bin": "dist/code-grep-bin.js",
   "dependencies": {
     "@babel/parser": "7.9.4",
     "@babel/traverse": "7.9.0",
@@ -29,6 +28,7 @@
     "grep": "npm run tsc:node -- ./src/code-grep-bin.ts",
     "test": "jest",
     "test:debug": "node --inspect --inspect-brk ./node_modules/.bin/jest --no-cache --no-watchman --runInBand",
-    "prepublish": "tsc"
+    "build": "rm -rf dist && tsc",
+    "prepublish": "npm run build"
   }
 }

@@ -1,5 +1,5 @@
-import { codeSearch } from 'code-grep';
-import { createCodeMask } from 'parsers/babel';
+import { codeSearch } from '../code-grep';
+import { createCodeMask } from '../parsers/babel';
 
 test('jsx expressions', () => {
     const mask = createCodeMask('<Component prop="test" />');

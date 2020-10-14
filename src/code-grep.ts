@@ -8,9 +8,8 @@
  * - Support block statements - { onOpen_: null }
  */
 
-import parseCode, { CodeMask } from 'parsers/babel';
+import parseCode, { CodeMask } from './parsers/babel';
 import traverse, { Node, NodePath, TraverseOptions } from '@babel/traverse';
-import { argv } from 'yargs';
 
 export function codeSearch(
     code: string,
