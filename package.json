@@ -1,6 +1,6 @@
 {
   "name": "@nikhilverma/ast-grep",
-  "version": "0.0.3-alpha",
+  "version": "0.0.4-alpha",
   "bin": "dist/code-grep-bin.js",
   "dependencies": {
     "@babel/parser": "7.9.4",

@@ -62,7 +62,10 @@ files.forEach(function (fileName: string) {
         fileName
     );
 
-    matches.forEach((nodePath) => console.log(`${fileName}: ${chalk.blue(nodePath.toString())}`));
+    //@todo - Smarter cwd replacement so users can Cmd+Click the files
+    matches.forEach((nodePath) =>
+        console.log(`.${fileName.replace(cwd, '')}: ${chalk.blue(nodePath.toString())}`)
+    );
 });
 
 console.log(`\n✅ Scanned ${filesScanned} files in ${(Date.now() - now) / 1000}s.`);
@@ -71,13 +74,13 @@ if (filesFailed.length > 0) {
     console.warn(
         `\n🔴 Failed to parse following files. Pass --verbose argument to see the errors:`
     );
-    filesFailed.forEach((fileFailed) => console.log(`  ${fileFailed}`));
+    filesFailed.forEach((fileFailed) => console.log(`  .${fileFailed.replace(cwd, '')}`));
 }
 
 if (filesSkipped.length > 0) {
     if (argv.verbose) {
         console.warn('\n⚠️ Following files were skipped because they were too large:');
-        filesSkipped.forEach((fileSkipped) => console.log(`  ${fileSkipped}`));
+        filesSkipped.forEach((fileSkipped) => console.log(`  .${fileSkipped.replace(cwd, '')}`));
     } else {
         console.warn(
             `\n⚠️ Skipped ${filesSkipped.length} files because they were larger than ${Math.round(
